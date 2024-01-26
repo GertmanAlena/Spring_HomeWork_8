@@ -2,7 +2,8 @@ package com.example.HomeWork5.controller;
 
 import com.example.HomeWork5.model.Task;
 import com.example.HomeWork5.model.TaskStatus;
-import com.example.HomeWork5.service.TasksService;
+import com.example.HomeWork5.repository.TaskRepository;
+//import com.example.HomeWork5.service.TasksService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskController {
 
-    private final TasksService tasksService;
+    private final TaskRepository taskRepository;
 
     /**
      * Добавление задачи
@@ -22,7 +23,7 @@ public class TaskController {
      */
     @PostMapping
     public Task addTask(@RequestBody Task task){
-        return tasksService.createTask(task);
+        return taskRepository.save(task);
     }
 
     /**
@@ -32,7 +33,7 @@ public class TaskController {
      */
     @GetMapping("/status/{status}")
     public List<Task> getTasksByStatus(@PathVariable TaskStatus status){
-        return tasksService.getTasksByStatus(status);
+        return taskRepository.findByStatus(status);
     }
 
     /**
@@ -44,7 +45,14 @@ public class TaskController {
     @PutMapping("/{id}") public Task updateTaskByStatus(
             @PathVariable Long id, @RequestBody Task task)
     {
-        return tasksService.updateTaskByStatus(id, task);
+        Task taskUpdateStatus = taskRepository.findById(id).orElse(null);
+        if(taskUpdateStatus != null){
+            taskUpdateStatus.setTaskStatus(task.getTaskStatus());
+            return taskRepository.save(taskUpdateStatus);
+        } else {
+            return null;
+        }
+
     }
 
     /**
@@ -52,7 +60,11 @@ public class TaskController {
      * @param id персональный идентификатор задачи
      */
     @DeleteMapping("/{id}") public void deleteTaskBuId(@PathVariable Long id){
-        tasksService.deleteTaskBuId(id);
+        taskRepository.deleteById(id);
     }
 
+    @GetMapping
+    public List<Task> getAllTasks(){
+        return taskRepository.findAll();
+    }
 }
