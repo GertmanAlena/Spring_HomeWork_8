@@ -7,6 +7,7 @@ import com.example.HomeWork5.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,6 +24,8 @@ public class TaskController {
      */
     @PostMapping
     public Task addTask(@RequestBody Task task){
+        task.setDateOfCreation(LocalDateTime.now());
+        task.setTaskStatus(TaskStatus.NOT_STARTED);
         return taskRepository.save(task);
     }
 
@@ -33,7 +36,7 @@ public class TaskController {
      */
     @GetMapping("/status/{status}")
     public List<Task> getTasksByStatus(@PathVariable TaskStatus status){
-        return taskRepository.findByStatus(status);
+        return taskRepository.findByTaskStatus(status);
     }
 
     /**
