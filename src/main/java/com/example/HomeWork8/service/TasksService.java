@@ -27,7 +27,7 @@ public class TasksService {
      * Получить список всех заметок
      * @return список заметок
      */
-
+    @TrackUserAction
     public ResponseEntity<List<Task>> findAll() {
         return new ResponseEntity<>(taskRepository.findAll(), HttpStatus.OK);
 
