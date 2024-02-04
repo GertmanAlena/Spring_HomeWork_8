@@ -1,4 +1,4 @@
-package com.example.HomeWork5.model;
+package com.example.HomeWork8.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

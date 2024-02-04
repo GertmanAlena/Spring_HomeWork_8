@@ -1,12 +1,12 @@
-package com.example.HomeWork5.repository;
+package com.example.HomeWork8.repository;
 
 
-import com.example.HomeWork5.model.Task;
+import com.example.HomeWork8.model.Task;
 
-import com.example.HomeWork5.model.TaskStatus;
+import com.example.HomeWork8.model.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
@@ -15,5 +15,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param status
      * @return
      */
-    List<Task> findByTaskStatus(TaskStatus status);
+    Optional<Task> findByTaskStatus(TaskStatus status);
 }

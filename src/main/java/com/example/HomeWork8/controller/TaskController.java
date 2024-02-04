@@ -1,14 +1,17 @@
-package com.example.HomeWork5.controller;
+package com.example.HomeWork8.controller;
 
-import com.example.HomeWork5.model.Task;
-import com.example.HomeWork5.model.TaskStatus;
-import com.example.HomeWork5.repository.TaskRepository;
-//import com.example.HomeWork5.service.TasksService;
+import com.example.HomeWork8.model.Task;
+import com.example.HomeWork8.model.TaskStatus;
+import com.example.HomeWork8.repository.TaskRepository;
+import com.example.HomeWork8.service.TasksService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -16,6 +19,7 @@ import java.util.List;
 public class TaskController {
 
     private final TaskRepository taskRepository;
+    private final TasksService service;
 
     /**
      * Добавление задачи
@@ -23,10 +27,10 @@ public class TaskController {
      * @return
      */
     @PostMapping
-    public Task addTask(@RequestBody Task task){
+    public ResponseEntity<Task> addTask(@RequestBody Task task){
         task.setDateOfCreation(LocalDateTime.now());
         task.setTaskStatus(TaskStatus.NOT_STARTED);
-        return taskRepository.save(task);
+        return new ResponseEntity<>(taskRepository.save(task), HttpStatus.CREATED);
     }
 
     /**
@@ -35,7 +39,7 @@ public class TaskController {
      * @return
      */
     @GetMapping("/status/{status}")
-    public List<Task> getTasksByStatus(@PathVariable TaskStatus status){
+    public Optional<Task> getTasksByStatus(@PathVariable TaskStatus status){
         return taskRepository.findByTaskStatus(status);
     }
 
@@ -45,13 +49,14 @@ public class TaskController {
      * @param task задача
      * @return
      */
-    @PutMapping("/{id}") public Task updateTaskByStatus(
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTaskByStatus(
             @PathVariable Long id, @RequestBody Task task)
     {
         Task taskUpdateStatus = taskRepository.findById(id).orElse(null);
         if(taskUpdateStatus != null){
             taskUpdateStatus.setTaskStatus(task.getTaskStatus());
-            return taskRepository.save(taskUpdateStatus);
+            return new ResponseEntity<>(taskRepository.save(taskUpdateStatus), HttpStatus.CREATED);
         } else {
             return null;
         }
@@ -62,12 +67,15 @@ public class TaskController {
      * Удаление задачи
      * @param id персональный идентификатор задачи
      */
-    @DeleteMapping("/{id}") public void deleteTaskBuId(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public void deleteTaskBuId(@PathVariable Long id){
+        service.publishComment(id);
         taskRepository.deleteById(id);
     }
 
     @GetMapping
-    public List<Task> getAllTasks(){
-        return taskRepository.findAll();
+    public ResponseEntity<List<Task>> findAll(){
+//        return taskRepository.findAll();
+        return service.findAll();
     }
 }
