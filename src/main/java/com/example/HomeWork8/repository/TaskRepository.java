@@ -16,4 +16,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @return
      */
     Optional<Task> findByTaskStatus(TaskStatus status);
+
 }

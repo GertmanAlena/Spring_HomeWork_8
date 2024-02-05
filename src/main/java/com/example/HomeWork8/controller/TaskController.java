@@ -2,14 +2,11 @@ package com.example.HomeWork8.controller;
 
 import com.example.HomeWork8.model.Task;
 import com.example.HomeWork8.model.TaskStatus;
-import com.example.HomeWork8.repository.TaskRepository;
 import com.example.HomeWork8.service.TasksService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +15,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TaskController {
 
-    private final TaskRepository taskRepository;
     private final TasksService service;
 
     /**
@@ -28,9 +24,7 @@ public class TaskController {
      */
     @PostMapping
     public ResponseEntity<Task> addTask(@RequestBody Task task){
-        task.setDateOfCreation(LocalDateTime.now());
-        task.setTaskStatus(TaskStatus.NOT_STARTED);
-        return new ResponseEntity<>(taskRepository.save(task), HttpStatus.CREATED);
+        return service.addTask(task);
     }
 
     /**
@@ -40,7 +34,7 @@ public class TaskController {
      */
     @GetMapping("/status/{status}")
     public Optional<Task> getTasksByStatus(@PathVariable TaskStatus status){
-        return taskRepository.findByTaskStatus(status);
+        return service.findByTaskStatus(status);
     }
 
     /**
@@ -50,17 +44,9 @@ public class TaskController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTaskByStatus(
-            @PathVariable Long id, @RequestBody Task task)
+    public ResponseEntity<Task> updateTaskByStatus(@PathVariable Long id, @RequestBody Task task)
     {
-        Task taskUpdateStatus = taskRepository.findById(id).orElse(null);
-        if(taskUpdateStatus != null){
-            taskUpdateStatus.setTaskStatus(task.getTaskStatus());
-            return new ResponseEntity<>(taskRepository.save(taskUpdateStatus), HttpStatus.CREATED);
-        } else {
-            return null;
-        }
-
+        return service.updateById(id, task);
     }
 
     /**
@@ -69,13 +55,15 @@ public class TaskController {
      */
     @DeleteMapping("/{id}")
     public void deleteTaskBuId(@PathVariable Long id){
-        service.publishComment(id);
-        taskRepository.deleteById(id);
+//        service.publishComment(id);
+        service.deleteById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> findAll(){
-//        return taskRepository.findAll();
+    public ResponseEntity<List<Task>>findAll(){
         return service.findAll();
+//        List<Task> allTasks = service.findAll();
+//        System.out.println("********" + allTasks);
+//        return ResponseEntity.ok().body(service.findAll());
     }
 }
