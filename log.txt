@@ -1,0 +1,6 @@
+февр. 05, 2024 7:24:31 PM com.example.HomeWork8.aspects.LoggingAspect logExecution
+INFO: LoggingAspect
+Вызван метод: findAll
+Передаваемые параметры: []
+Возвращаемые параметры: 201 CREATED[Task(id=1, description=Купить корм собаке, taskStatus=NOT_STARTED, dateOfCreation=2024-02-05T19:24:24.003822), Task(id=2, description=Купить корм кошке, taskStatus=IN_PROGRESS, dateOfCreation=2024-02-05T19:24:24.007818)]
+Время обработки запроса: 415

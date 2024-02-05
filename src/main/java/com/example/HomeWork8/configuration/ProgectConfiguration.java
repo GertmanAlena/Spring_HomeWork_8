@@ -21,13 +21,13 @@ public class ProgectConfiguration {
         return new LoggingAspect();
     }
 
-//    @Bean
-//    public Logger noteLogger() throws IOException {
-//        Logger logger = Logger.getLogger(LoggingAspect.class.getName());
-////        ConsoleHandler handler = new ConsoleHandler();
-//        FileHandler handler = new FileHandler("log.txt");
-//        handler.setFormatter(new SimpleFormatter());
-//        logger.addHandler(handler);
-//        return logger;
-//    }
+    @Bean
+    public Logger noteLogger() throws IOException {
+        Logger logger = Logger.getLogger(LoggingAspect.class.getName());
+//        ConsoleHandler handler = new ConsoleHandler();
+        FileHandler handler = new FileHandler("log.txt");
+        handler.setFormatter(new SimpleFormatter());
+        logger.addHandler(handler);
+        return logger;
+    }
 }

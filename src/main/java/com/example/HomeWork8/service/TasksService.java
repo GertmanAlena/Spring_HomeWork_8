@@ -29,8 +29,6 @@ public class TasksService {
      */
     @TrackUserAction
     public ResponseEntity<List<Task>> findAll() {
-        List<Task> allTasks = taskRepository.findAll();
-                System.out.println("---> TasksService allTasks <---" + allTasks);
         return new ResponseEntity<>(taskRepository.findAll(), HttpStatus.CREATED);
 
     }

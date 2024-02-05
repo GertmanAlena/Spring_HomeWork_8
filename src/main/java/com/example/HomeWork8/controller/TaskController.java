@@ -60,10 +60,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>>findAll(){
-        return service.findAll();
-//        List<Task> allTasks = service.findAll();
-//        System.out.println("********" + allTasks);
-//        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<List<Task>>getAllTasks(){
+        return ResponseEntity.ok().body(service.findAll().getBody());
     }
 }
